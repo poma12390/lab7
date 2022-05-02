@@ -159,7 +159,6 @@ public class Worker implements Comparable<Worker>, Serializable {
         if (position!=null) {s +=position.toString() + ";";} else {s+=";";}
         if (id!=null){s += id.toString() + ";";} else {s+="lifehaack;";}
         if (creationDate!=null){s += crdate.toString() + "";} else {s+=new Date();}
-        s+="\r\n";
         return s;
     }
 }

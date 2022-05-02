@@ -3,6 +3,8 @@ package lab6.common;
 import lab6.common.dto.CoordinatesDto;
 import lab6.common.dto.PersonDto;
 import lab6.common.dto.WorkerDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,8 +13,29 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Transformer {
+    private static final Logger logger
+            = LoggerFactory.getLogger(Transformer.class);
+    public static String Encrypt(String password, String salt){
+        String generatedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(salt.getBytes(StandardCharsets.UTF_8));
+            byte[] bytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++){
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            logger.error(e.getMessage());
+        }
+        return generatedPassword;
+    }
 
 
     public static WorkerDto WorkerToWorkerDto(Worker bum) {

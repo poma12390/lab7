@@ -31,7 +31,7 @@ public class ClientRunner {
         try {
 
             while (true) {
-                logger.info("Write a command: ");
+                System.out.print("Write a command: ");
                 String input = bufferedReader.readLine();
                 Utils.runCommandFromString(input);
             }

@@ -59,7 +59,8 @@ public class Utils {
             new RemoveByIdCommand(),
             new RemoveAllByEndDateCommand(),
             new SaveCommand(),
-            new UpdateIdCommand()
+            new UpdateIdCommand(),
+            new AuthCommand()
     );
 
 
