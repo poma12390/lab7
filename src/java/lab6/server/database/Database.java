@@ -88,5 +88,10 @@ public class Database {
         stmt = parseSql(sql, args);
         return stmt.executeQuery();
     }
-
+    public int executeUpdate(@Language("SQL")String sql, Object... args) throws SQLException {
+        stmt = parseSql(sql, args);
+        int answer = stmt.executeUpdate();
+        stmt.close();
+        return answer;
+    }
 }

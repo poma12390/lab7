@@ -7,6 +7,7 @@ import lab6.common.exceptions.EmptyCollectionException;
 import lab6.common.exceptions.EndStreamException;
 import lab6.common.exceptions.InvalidDataException;
 import lab6.common.exceptions.MissedCommandArgumentException;
+import lab6.server.database.Database;
 import lab6.server.setters.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,12 @@ public class Commands {
 
     public static boolean isFileExecuted = false;
 
+    public static Database getDatabase() {
+        return database;
+    }
+
+    private static Database database;
+
     private static final List<lab6.server.commands.BaseCommand> commands = Arrays.asList(
             new ShowCommand(),
             new ExitCommand(),
@@ -51,12 +58,19 @@ public class Commands {
             new RemoveByIdCommand(),
             new RemoveAllByEndDateCommand(),
             new SaveCommand(),
-            new UpdateIdCommand()
+            new UpdateIdCommand(),
+            new AuthCommand(),
+            new RegisterCommand()
     );
 
     public static void temporaryStart(String filename){
+        database = Database.getInstance();
         String start = open(filename);
         begin(start, workers);
+    }
+
+    public static int getRandomNumber(){
+        return (int) ((Math.random() * 1000));
     }
 
     /**
