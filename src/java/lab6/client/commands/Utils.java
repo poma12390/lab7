@@ -60,7 +60,8 @@ public class Utils {
             new RemoveAllByEndDateCommand(),
             new SaveCommand(),
             new UpdateIdCommand(),
-            new AuthCommand()
+            new AuthCommand(),
+            new RegisterCommand()
     );
 
 
