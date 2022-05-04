@@ -28,7 +28,6 @@ public class ShowCommand extends BaseCommand {
         byte[] buf = serverCaller.sendToServer(transformer.Serialize(crd));
 
         //byte[] buf = ServerReceiver.receiveFromServer();
-        Object obj = transformer.DeSerialize(buf);
         CommandResponseDto response = (CommandResponseDto) transformer.DeSerialize(buf);
         dto = (ShowCommandDto) response.getCommandArgs();
 

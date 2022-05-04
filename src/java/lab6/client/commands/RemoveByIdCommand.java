@@ -1,5 +1,6 @@
 package lab6.client.commands;
 
+import lab6.client.memory.LoginPassword;
 import lab6.common.dto.CommandRequestDto;
 import lab6.common.dto.CommandResponseDto;
 import lab6.common.dto.RemoveByIdCommandDto;
@@ -33,7 +34,6 @@ public class RemoveByIdCommand extends BaseCommand {
         ParamsChecker.checkParams(1, params);
         RemoveByIdCommandDto dto = new RemoveByIdCommandDto();
         CommandRequestDto<RemoveByIdCommandDto> crd = new CommandRequestDto<>(getName(), dto);
-
         try {
             int id = Integer.parseInt(params.get(0));
             dto.setId(id);
