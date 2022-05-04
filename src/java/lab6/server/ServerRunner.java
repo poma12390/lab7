@@ -29,11 +29,11 @@ public class ServerRunner implements SignalHandler{
         try {
             ResultSet set = database.executeQuery("select * from users");
             //database.executeUpdate("INSERT INTO Users  VALUES (3, 'SHer', 333,33)");
-            database.executeUpdate("DELETE from users where id = 3");
+            //database.executeUpdate("DELETE from users where id = 3");
 
-            while (set.next()){
-                System.out.println(set.getString("salt"));
-            }
+//            while (set.next()){
+//                System.out.println(set.getString("salt"));
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

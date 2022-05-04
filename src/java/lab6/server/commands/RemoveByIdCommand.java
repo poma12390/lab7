@@ -30,6 +30,7 @@ public class RemoveByIdCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
             RemoveByIdCommandDto removeByIdCommandDto = (RemoveByIdCommandDto) params.getCommandArgs();
+        System.out.println(params.getLogin());
             int id = removeByIdCommandDto.getId();
             long count = (set.stream().filter((p) -> p.getId() == id).count());
             set.removeIf(worker -> worker.getId() == id);
