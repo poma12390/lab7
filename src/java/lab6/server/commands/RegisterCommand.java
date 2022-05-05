@@ -37,12 +37,13 @@ public class RegisterCommand extends BaseCommand {
 //        }
 
         try {
-            ResultSet set1 = database.executeQuery("select * from users where username = \'"+registerCommandDto.getLogin()+"\'"); //Check repeat login
+            ResultSet set1 = database.executeQuery("select * from users where username = ?", registerCommandDto.getLogin()); //Check repeat login
             while (set1.next()){
                 repLogin = true;
             }
             if (!repLogin){
-                int request = database.executeUpdate("INSERT INTO users VALUES (nextval('IdSetter')," + "\'"+ registerCommandDto.getLogin()+ "\', \'" + password +"\', \'" + random+ "\');");
+                int request = database.executeUpdate("INSERT INTO users VALUES (nextval('IdSetter'), ?, ?, ?)",
+                        registerCommandDto.getLogin(), password, random);
                 dto.setResponse("success");
             }
             else {

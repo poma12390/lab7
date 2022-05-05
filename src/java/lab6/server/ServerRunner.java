@@ -24,20 +24,6 @@ public class ServerRunner implements SignalHandler{
 
     public static void main(String[] args) {
         Database database = Database.getInstance();
-        System.out.println(database);
-        String test = "rrr";
-        try {
-            ResultSet set = database.executeQuery("select * from users");
-            //database.executeUpdate("INSERT INTO Users  VALUES (3, 'SHer', 333,33)");
-            //database.executeUpdate("DELETE from users where id = 3");
-
-//            while (set.next()){
-//                System.out.println(set.getString("salt"));
-//            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
 
         Commands.temporaryStart("C:\\Users\\pomat\\IdeaProjects\\lab6\\Server\\save.csv");
         //String env = System.getenv("Javahome");
@@ -48,8 +34,6 @@ public class ServerRunner implements SignalHandler{
         new Thread(() -> {
             ClientReceiver receiver = new ClientReceiver();
                 receiver.run();
-
-
             // выполнение в отдельном потоке
 
         }).start();

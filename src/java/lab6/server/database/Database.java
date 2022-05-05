@@ -16,7 +16,7 @@ public class Database {
     private static String CONFIG_FILE = "db.cfg";
     private final Connection connection;
     private PreparedStatement stmt;
-    private final String dbSalt;
+
     static final String USER = "postgres";
     static final String PASS = "studs";
 
@@ -34,7 +34,6 @@ public class Database {
         String url = String.format("jdbc:postgresql://127.0.0.1:5432/postgres");
         logger.info(url);
         connection = DriverManager.getConnection(url, USER, PASS);
-        this.dbSalt = prop.getProperty("dbSalt");
         logger.info(String.valueOf(connection));
     }
 

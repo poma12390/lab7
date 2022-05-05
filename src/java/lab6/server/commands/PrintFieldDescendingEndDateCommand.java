@@ -28,7 +28,7 @@ public class PrintFieldDescendingEndDateCommand extends BaseCommand {
 
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
-
+        //TODO fork join pool sort
         List<Date> dates = Arrays.stream(set.stream().flatMap((p) -> Stream.of(p.getEndDate())).toArray(Date[]::new)).sorted().collect(Collectors.toList());
         // На часах 5:20 Жестко переписал с Stream Api
         PrintFieldDescendingEndDateCommandDto dts = new PrintFieldDescendingEndDateCommandDto();
