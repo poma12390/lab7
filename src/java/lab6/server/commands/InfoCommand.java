@@ -20,7 +20,7 @@ public class InfoCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
         String response = "";
-        int size = (int) set.stream().count(); //help me
+        int size = set.size(); //help me
         if (size == 0){
             response = response + "empty collection";
         }
@@ -32,7 +32,7 @@ public class InfoCommand extends BaseCommand {
             response = response + "Created date - " + p1.getCreationDate();
 
         }
-        CommandResponseDto dto = new CommandResponseDto(new InfoCommandDto());
+        CommandResponseDto<InfoCommandDto> dto = new CommandResponseDto<>(new InfoCommandDto());
         dto.setResponse(response);
         clientCaller.sendToClient(transformer.serialize(dto));
     }

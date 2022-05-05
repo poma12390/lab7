@@ -24,7 +24,7 @@ public class AddCommand extends BaseCommand {
         Worker bum = Transformer.WorkerDtoToWorker(workerDto);
         lab6.server.commands.Commands.makeId(bum);
         set.add(bum);
-        CommandResponseDto dto = new CommandResponseDto(addCommandDto);
+        CommandResponseDto<AddCommandDto> dto = new CommandResponseDto<>(addCommandDto);
         dto.setResponse("success");
         clientCaller.sendToClient(transformer.serialize(dto));
     }

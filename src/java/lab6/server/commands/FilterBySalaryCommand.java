@@ -39,7 +39,7 @@ public class FilterBySalaryCommand extends BaseCommand {
         List<Worker> workers = (set.stream().filter((p) -> p.getSalary() == salary).collect(Collectors.toList())); // Получаем нужных челов
         response = response + "Всего найдено " + workers.size() + " челов" + "\r\n";
         filterBySalaryCommandDto.setWorkers(workers);
-        CommandResponseDto dto = new CommandResponseDto(filterBySalaryCommandDto);
+        CommandResponseDto<FilterBySalaryCommandDto> dto = new CommandResponseDto<>(filterBySalaryCommandDto);
         dto.setResponse(response);
         clientCaller.sendToClient(transformer.serialize(dto));
     }

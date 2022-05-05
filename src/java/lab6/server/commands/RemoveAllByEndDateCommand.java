@@ -41,7 +41,7 @@ public class    RemoveAllByEndDateCommand extends BaseCommand {
         //Commands.getIds().removeIf(p -> p.equals(work.getId()));
         set.removeIf(worker -> worker.getEndDate().equals(endDate));
         removeAllByEndDateCommandDto.setCount(count);
-        CommandResponseDto dto = new CommandResponseDto(removeAllByEndDateCommandDto);
+        CommandResponseDto<RemoveAllByEndDateCommandDto> dto = new CommandResponseDto<>(removeAllByEndDateCommandDto);
         clientCaller.sendToClient(transformer.serialize(dto));
 
     }

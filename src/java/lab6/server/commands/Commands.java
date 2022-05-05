@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.*;
 
@@ -78,7 +80,7 @@ public class Commands {
      * @param filename file name
      */
     public static String open(String filename) {
-        try (InputStream is = new FileInputStream(filename)) {
+        try (InputStream is = Files.newInputStream(Paths.get(filename))) {
             try (BufferedInputStream bis = new BufferedInputStream(is)) {
                 ByteArrayOutputStream buf = new ByteArrayOutputStream();
                 int result = bis.read();

@@ -23,7 +23,7 @@ public class RegisterCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) throws IOException, InvalidSalaryException, InvalidDateFormatException, ParseException, InvalidEndDateException {
         RegisterCommandDto registerCommandDto = (RegisterCommandDto) params.getCommandArgs();
-        CommandResponseDto dto = new CommandResponseDto(registerCommandDto);
+        CommandResponseDto<RegisterCommandDto> dto = new CommandResponseDto<>(registerCommandDto);
         int random = Commands.getRandomNumber();
         boolean repLogin = false;
 

@@ -4,6 +4,7 @@ import lab6.common.Transformer;
 import lab6.common.Worker;
 import lab6.common.dto.CommandRequestDto;
 import lab6.common.dto.CommandResponseDto;
+import lab6.common.dto.RemoveLowerCommandDto;
 import lab6.common.exceptions.EmptyCollectionException;
 import lab6.server.ClientCaller;
 

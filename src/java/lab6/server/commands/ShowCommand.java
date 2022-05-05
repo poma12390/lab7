@@ -30,7 +30,7 @@ public class ShowCommand extends BaseCommand {
         );
 
         clientCaller.sendToClient(
-                transformer.serialize(new CommandResponseDto(showCommandDto))
+                transformer.serialize(new CommandResponseDto<>(showCommandDto))
         );
     }
 }

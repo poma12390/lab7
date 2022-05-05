@@ -26,7 +26,7 @@ public class UpdateIdCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) throws IOException {
         UpdateIdCommandDto updateIdCommandDto = (UpdateIdCommandDto) params.getCommandArgs();
-        CommandResponseDto dto = new CommandResponseDto(updateIdCommandDto);
+        CommandResponseDto<UpdateIdCommandDto> dto = new CommandResponseDto<>(updateIdCommandDto);
         if (updateIdCommandDto.getWorkerDto() != null) {
             Worker newbum = Transformer.WorkerDtoToWorker(updateIdCommandDto.getWorkerDto());
             Worker bum = Commands.getWorkerById(updateIdCommandDto.getWorkerId());

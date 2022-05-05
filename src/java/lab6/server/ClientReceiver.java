@@ -31,7 +31,7 @@ public class ClientReceiver {
         boolean c = false;
         Database database = Commands.getDatabase();
         try {
-            ResultSet set = database.executeQuery("select * from users where username = 'admin'");
+            ResultSet set = database.executeQuery("select * from users where username = ?", login);
             while (set.next()) {
                 String password1 = set.getString("password");
                 String password2 = Transformer.Encrypt(password, set.getString("salt"));
@@ -77,7 +77,6 @@ public class ClientReceiver {
                     d = checkAuth(dto.getLogin(), dto.getPassword());
                 }
                 if (d || command.equals("Auth") || command.equals("Register")) {
-                    System.out.println(d);
                     Commands.runCommandFromString(Commands.getWorkersSet(), command, dto);
                 }
                 else {

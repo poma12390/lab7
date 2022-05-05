@@ -20,7 +20,7 @@ public class ClearCommand extends BaseCommand {
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
 
         set.clear();
-        CommandResponseDto dto = new CommandResponseDto(new ClearCommandDto());
+        CommandResponseDto<ClearCommandDto> dto = new CommandResponseDto<>(new ClearCommandDto());
         dto.setResponse("success");
         clientCaller.sendToClient(transformer.serialize(dto));
     }

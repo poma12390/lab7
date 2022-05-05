@@ -8,13 +8,7 @@ import lab6.server.ClientCaller;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 
-public class ExitCommand extends BaseCommand
-
-        /**
-         * exit command
-         * command for exit
-         */
-{
+public class ExitCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
     }

@@ -30,14 +30,14 @@ public class AddIfMinCommand extends BaseCommand {
         AddIfMinCommandDto addIfMinCommandDto = (AddIfMinCommandDto) params.getCommandArgs();
         WorkerDto workerDto = addIfMinCommandDto.getBum();
         Worker bum = Transformer.WorkerDtoToWorker(workerDto);
-        CommandResponseDto dto = new CommandResponseDto(addIfMinCommandDto);
+        CommandResponseDto<AddIfMinCommandDto> dto = new CommandResponseDto<>(addIfMinCommandDto);
         if (set.size() == 0) {
-            bum = makeId(bum);
+            makeId(bum);
             set.add(bum);
         } else {
             Worker min = set.stream().min(Worker::compareTo).get(); //stream Api
             if (bum.compareTo(min) < 0) {
-                bum = makeId(bum);
+                makeId(bum);
                 set.add(bum);
                 dto.setResponse("success");
 

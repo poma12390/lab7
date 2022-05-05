@@ -33,7 +33,7 @@ public class PrintFieldDescendingEndDateCommand extends BaseCommand {
         // На часах 5:20 Жестко переписал с Stream Api
         PrintFieldDescendingEndDateCommandDto dts = new PrintFieldDescendingEndDateCommandDto();
         dts.setDates(dates);
-        CommandResponseDto dto = new CommandResponseDto(dts);
+        CommandResponseDto<PrintFieldDescendingEndDateCommandDto> dto = new CommandResponseDto<>(dts);
         clientCaller.sendToClient(transformer.serialize(dto));
     }
 }
