@@ -61,7 +61,8 @@ public class Utils {
             new SaveCommand(),
             new UpdateIdCommand(),
             new AuthCommand(),
-            new RegisterCommand()
+            new RegisterCommand(),
+            new QuitCommand()
     );
 
 

@@ -56,7 +56,7 @@ public abstract class BaseCommand {
         try {
             Execute(params);
             HistoryWork.historyAdd(name);
-        } catch (ServerNotFoundException|  InvalidEndDateException | FileNotFoundException | MissedCommandArgumentException | EmptyCollectionException | InvalidSalaryException | InvalidDateFormatException | RecursiveScriptExecuteException e){
+        } catch (ServerNotFoundException|  InvalidEndDateException | FileNotFoundException | MissedCommandArgumentException | EmptyCollectionException | InvalidSalaryException | InvalidDateFormatException | RecursiveScriptExecuteException | AuthorizationException e){
             logger.error(marker, e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();

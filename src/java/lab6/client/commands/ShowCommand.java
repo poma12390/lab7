@@ -30,17 +30,14 @@ public class ShowCommand extends BaseCommand {
         //byte[] buf = ServerReceiver.receiveFromServer();
         CommandResponseDto response = (CommandResponseDto) transformer.DeSerialize(buf);
         dto = (ShowCommandDto) response.getCommandArgs();
-
-
         List<Worker> workers = (List<Worker>) dto.getWorkers();
-         if (workers.size() == 0) {
+        if (workers.size() == 0) {
             logger.error("Collection is empty");
         } else {
             for (Worker i : workers) {
                 logger.info(String.valueOf(i));
             }
         }
-
 
     }
 }

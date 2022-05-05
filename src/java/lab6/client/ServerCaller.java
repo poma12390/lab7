@@ -2,6 +2,8 @@ package lab6.client;
 
 
 import lab6.common.Transformer;
+import lab6.common.dto.CommandResponseDto;
+import lab6.common.exceptions.AuthorizationException;
 import lab6.common.exceptions.ServerNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +53,14 @@ public class ServerCaller {
                     ServerReceiver.sleep(1000);
                     addr = ServerReceiver.receiveFromServer(dc, buf, host, port);
                     //addr = dc.receive(buf);
+                    Transformer transformer = new Transformer();
+
 
                     if (ret[0]!=0) {
+                        CommandResponseDto response = (CommandResponseDto) transformer.DeSerialize(buf.array());
+                        if (response.getResponse()!=null && response.getResponse().equals("you should be authorized")) {
+                            throw new AuthorizationException();
+                        }
                         return buf.array();
                     }
                     if (i < 4) {
@@ -61,9 +69,7 @@ public class ServerCaller {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
             }
-
             return recive;
         } finally {
             try {
