@@ -39,9 +39,11 @@ public class ClientReceiver {
                     c = true;
                 }
             }
+            database.closeQuery();
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
+
         return c;
     }
 

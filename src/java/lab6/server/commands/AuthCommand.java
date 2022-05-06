@@ -41,7 +41,7 @@ public class AuthCommand extends BaseCommand{
                     repLogin = true;
                 }
 
-            }
+            }database.closeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

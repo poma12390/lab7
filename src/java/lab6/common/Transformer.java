@@ -135,5 +135,10 @@ public class Transformer {
         ObjectInputStream is = new ObjectInputStream(in);
         return is.readObject();
     }
+    public static String parseDate(String date){
+        String newDate = "";
+
+        return newDate;
+    }
 
 }

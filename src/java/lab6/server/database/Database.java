@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Properties;
 
 public class Database {
@@ -74,8 +75,10 @@ public class Database {
                 stmt.setFloat(i, (Float)arg);
             } else if (arg instanceof LocalDate) {
                 stmt.setObject(i, arg);
-            }else if (arg instanceof ZonedDateTime) {
-                stmt.setObject(i, arg);
+            } else if (arg instanceof Date) {
+                stmt.setDate(i, new java.sql.Date(((Date) arg).getTime()));
+            } else if (arg instanceof  ZonedDateTime){
+                stmt.setDate(i, new java.sql.Date(((Date) Date.from(((ZonedDateTime)arg).toInstant())).getTime()));
             } else {
                 stmt.close();
                 throw new SQLException("unknown data type");
@@ -92,5 +95,12 @@ public class Database {
         int answer = stmt.executeUpdate();
         stmt.close();
         return answer;
+    }
+    public void closeQuery() throws SQLException {
+        stmt.close();
+    }
+
+    public void closeConnection() throws SQLException {
+        connection.close();
     }
 }

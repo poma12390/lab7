@@ -1,6 +1,7 @@
 package lab6.server.commands;
 
 import lab6.common.Person;
+import lab6.common.Position;
 import lab6.common.Worker;
 import lab6.common.dto.CommandRequestDto;
 import lab6.common.exceptions.EmptyCollectionException;
@@ -158,6 +159,20 @@ public class Commands {
 
         }
         return null;
+    }
+
+    public static void addWorkerToDataBase(Worker bum){
+        String name = bum.getName();
+        long x =  bum.getCoordinates().getX();
+        int y = bum.getCoordinates().getY();
+        String creationDate = String.valueOf(bum.getCreationDate());
+        float salary = bum.getSalary();
+        String startDate= String.valueOf(bum.getStartDate());
+        String endDate= String.valueOf(bum.getEndDate());
+        Position pos = bum.getPosition();
+        String birthday = String.valueOf(bum.getPerson().getBirthday());
+        float height = bum.getPerson().getHeight();
+        float weight = bum.getPerson().getWeight();
     }
 
 
