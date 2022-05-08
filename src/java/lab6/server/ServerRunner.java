@@ -1,7 +1,6 @@
 package lab6.server;
 
 
-import lab6.common.Worker;
 import lab6.common.dto.ClearCommandDto;
 import lab6.common.dto.CommandRequestDto;
 import lab6.server.commands.Commands;
@@ -16,12 +15,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.LinkedHashSet;
 
 public class ServerRunner implements SignalHandler{
     private static final Logger logger
@@ -31,6 +24,7 @@ public class ServerRunner implements SignalHandler{
         Database database = Database.getInstance();
 
         Commands.temporaryStart("C:\\Users\\pomat\\IdeaProjects\\lab6\\Server\\save.csv");
+        Commands.dataBaseToCollection();
 
         //String env = System.getenv("Javahome");
         //System.out.println(env + " env");

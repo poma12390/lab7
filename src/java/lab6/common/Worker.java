@@ -19,8 +19,15 @@ public class Worker implements Comparable<Worker>, Serializable {
         this.person = person;
     }
 
-    public Worker() {
+    private final String user;
+
+    public Worker(String user) {
+        this.user = user;
         this.creationDate = new Date();
+    }
+
+    public String getUser() {
+        return user;
     }
 
     public Integer getId() {
@@ -126,7 +133,7 @@ public class Worker implements Comparable<Worker>, Serializable {
 
     @Override
     public String toString(){
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String strCreationDate = dateFormat.format(creationDate);
 
         String edate = "";
@@ -134,7 +141,7 @@ public class Worker implements Comparable<Worker>, Serializable {
         String crdate ="";
         String pattern = "dd.MM.yyyy";
         String birth = "";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateFormat df = new SimpleDateFormat(pattern);
         if (endDate!=null){
             edate =  df.format(endDate);
@@ -147,7 +154,7 @@ public class Worker implements Comparable<Worker>, Serializable {
             crdate =  df.format(creationDate);
 
         }
-
+        if (user!=null) {s += user + ";";} else {s+=";";}
         if (name!=null) {s += name + ";";} else {s+=";";}
         if (coordinates.toString()!=null) {s +=coordinates.toString();} else {s+=";";}
         if (Float.toString(salary)!=null) {s += Float.toString(salary) + ";";} else {s+=";";}

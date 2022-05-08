@@ -75,7 +75,7 @@ public class Transformer {
             throw new RuntimeException(e);
         }
     }public static Worker WorkerDtoToWorker(WorkerDto man){
-        Worker bum = new Worker();
+        Worker bum = new Worker("poma");
         bum.setName(man.getName());
         bum.setCoordinates(CoordinatesDtoToCoordinates(man.getCoordinates()));
         bum.setCreationDate(man.getCreationDate());

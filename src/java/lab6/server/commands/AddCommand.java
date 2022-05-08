@@ -28,6 +28,7 @@ public class AddCommand extends BaseCommand {
         } else {
             WorkerDto workerDto = addCommandDto.getBum();
             Worker bum = Transformer.WorkerDtoToWorker(workerDto);
+            Commands.addWorkerToDataBase(bum);
             lab6.server.commands.Commands.makeId(bum);
             try {
                 int req = Commands.getDatabase().executeUpdate("INSERT INTO workers VALUES (nextval('WorkerIdSetter'), 'poma',1,2, '2022-02-02' , 25 , '2010-04-04' , '2020-05-05' , 'DIRECTOR' , ?, 12.1 , 13.0)", bum.getCreationDate());
