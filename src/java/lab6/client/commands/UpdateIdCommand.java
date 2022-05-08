@@ -1,6 +1,7 @@
 package lab6.client.commands;
 
 import lab6.client.ServerReceiver;
+import lab6.client.memory.LoginPassword;
 import lab6.common.Transformer;
 import lab6.common.Worker;
 import lab6.common.dto.CommandRequestDto;
@@ -46,7 +47,7 @@ public class UpdateIdCommand extends BaseCommand {
         String response = responseObj.getResponse();
         logger.info(response);
         if (response.equals("Correct id")) {
-            Worker bum = new Worker();
+            Worker bum = new Worker(LoginPassword.getLogin());
             Utils.updateAll(bum);
             dto.setWorkerDto(Transformer.WorkerToWorkerDto(bum));
 

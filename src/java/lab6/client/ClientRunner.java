@@ -42,23 +42,7 @@ public class ClientRunner {
         }
 
 
-        Worker bum = new Worker();
-        WorkerDto workerDto = Transformer.WorkerToWorkerDto(bum);
-        CommandRequestDto<WorkerDto> commandRequestDto = new CommandRequestDto<>("add", workerDto);
-        AddCommandDto add = new AddCommandDto();
-
-        Transformer transformer = new Transformer();
-        bum.setName("maaan");
-        bum.setId(1123);
-        byte[] a = new byte[2048];
-
-        WorkerDto man = Transformer.WorkerToWorkerDto(bum);
-
-        add.setBum(man);
-        ByteBuffer buf = ByteBuffer.wrap(a);
-        buf.put(transformer.Serialize(man));
-
-        CommandRequestDto<AddCommandDto> crd = new CommandRequestDto<>("add", add);//System.out.println(crd.getCommandArgs().getBum().getName() + " " + crd.getCommandName());
+//System.out.println(crd.getCommandArgs().getBum().getName() + " " + crd.getCommandName());
 
 //        try {
 //

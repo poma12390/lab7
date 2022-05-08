@@ -1,7 +1,6 @@
 package lab6.client.commands;
 
 import lab6.client.ServerCaller;
-import lab6.client.ServerReceiver;
 import lab6.client.memory.HistoryWork;
 import lab6.common.Transformer;
 import lab6.common.exceptions.*;
@@ -24,7 +23,6 @@ public abstract class BaseCommand {
     private static final String SUFFIX = "Command";
 
     ServerCaller serverCaller = new ServerCaller();
-    ServerReceiver serverReceiver = new ServerReceiver();
     Transformer transformer = new Transformer();
     private final String name;
 
@@ -57,7 +55,7 @@ public abstract class BaseCommand {
             Execute(params);
             HistoryWork.historyAdd(name);
         } catch (ServerNotFoundException|  InvalidEndDateException | FileNotFoundException | MissedCommandArgumentException | EmptyCollectionException | InvalidSalaryException | InvalidDateFormatException | RecursiveScriptExecuteException | AuthorizationException e){
-            logger.error(marker, e.getMessage());
+            logger.warn(marker, e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {

@@ -1,5 +1,10 @@
 package lab6.client.memory;
 
+import lab6.common.dto.CommandResponseDto;
+import lab6.common.exceptions.AuthorizationException;
+
+import java.io.Serializable;
+
 public class LoginPassword {
     private static String login;
     private static String password;
@@ -19,4 +24,5 @@ public class LoginPassword {
     public static void setPassword(String password) {
         LoginPassword.password = password;
     }
+
 }
