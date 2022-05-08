@@ -26,16 +26,22 @@ public class RemoveLowerCommand extends BaseCommand {
 
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
-        CommandResponseDto dto = new CommandResponseDto(params.getCommandArgs());
-        if (set.size() == 0) {
-            dto.setResponse("Collection is empty");
-            clientCaller.sendToClient(transformer.serialize(dto));
-            throw new EmptyCollectionException();
-        }
-        Worker min = Collections.min(set);
-        set.remove(min);
+        boolean auth = Commands.checkAuth(params);
+        CommandResponseDto<RemoveLowerCommandDto> dto = new CommandResponseDto<>((RemoveLowerCommandDto) params.getCommandArgs());
+        if (!auth) {
+            dto.setResponse("you should be authorized");
+        } else {
+            if (set.size() == 0) {
+                dto.setResponse("Collection is empty");
+                clientCaller.sendToClient(transformer.serialize(dto));
+                throw new EmptyCollectionException();
+            }
+            Worker min = Collections.min(set);
+            set.remove(min);
 
-        dto.setResponse("success");
+            dto.setResponse("success");
+
+        }
         clientCaller.sendToClient(transformer.serialize(dto));
     }
 }

@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class PrintFieldDescendingEndDateCommand extends BaseCommand {
     @Override
     public String getName() {
-        return "print_field_descending_end_date";
+            return "print_field_descending_end_date";
     }
 
     /**
@@ -29,11 +29,17 @@ public class PrintFieldDescendingEndDateCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
         //TODO fork join pool sort
-        List<Date> dates = Arrays.stream(set.stream().flatMap((p) -> Stream.of(p.getEndDate())).toArray(Date[]::new)).sorted().collect(Collectors.toList());
-        // На часах 5:20 Жестко переписал с Stream Api
+        boolean auth = Commands.checkAuth(params);
         PrintFieldDescendingEndDateCommandDto dts = new PrintFieldDescendingEndDateCommandDto();
-        dts.setDates(dates);
         CommandResponseDto<PrintFieldDescendingEndDateCommandDto> dto = new CommandResponseDto<>(dts);
+        if (!auth) {
+            dto.setResponse("you should be authorized");
+        } else {
+            List<Date> dates = Arrays.stream(set.stream().flatMap((p) -> Stream.of(p.getEndDate())).toArray(Date[]::new)).sorted().collect(Collectors.toList());
+            // На часах 5:20 Жестко переписал с Stream Api
+
+            dts.setDates(dates);
+        }
         clientCaller.sendToClient(transformer.serialize(dto));
     }
 }

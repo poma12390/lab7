@@ -20,20 +20,26 @@ public class InfoCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
         String response = "";
-        int size = set.size(); //help me
-        if (size == 0){
-            response = response + "empty collection";
-        }
-        else{
-            Iterator<Worker> it = set.iterator();
-            Worker p1 = it.next();
-            response = response + "Collection size " + size + "\r\n";
-            response = response + "Type - Worker \r\n";
-            response = response + "Created date - " + p1.getCreationDate();
-
-        }
         CommandResponseDto<InfoCommandDto> dto = new CommandResponseDto<>(new InfoCommandDto());
-        dto.setResponse(response);
+        boolean auth = Commands.checkAuth(params);
+        if (!auth) {
+            dto.setResponse("you should be authorized");
+        } else {
+            int size = set.size(); //help me
+            if (size == 0) {
+                response = response + "empty collection";
+            } else {
+                Iterator<Worker> it = set.iterator();
+                Worker p1 = it.next();
+                response = response + "Collection size " + size + "\r\n";
+                response = response + "Type - Worker \r\n";
+                response = response + "Created date - " + p1.getCreationDate();
+
+            }
+
+            dto.setResponse(response);
+        }
         clientCaller.sendToClient(transformer.serialize(dto));
+
     }
 }

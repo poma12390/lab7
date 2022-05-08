@@ -3,8 +3,6 @@ package lab6.server;
 
 import lab6.common.Transformer;
 import lab6.common.dto.CommandRequestDto;
-import lab6.common.dto.CommandResponseDto;
-import lab6.common.dto.InfoCommandDto;
 import lab6.server.commands.Commands;
 import lab6.server.database.Database;
 import org.slf4j.Logger;
@@ -72,21 +70,22 @@ public class ClientReceiver {
                 CommandRequestDto dto = (CommandRequestDto) transformer.DeSerialize(arr);
                 command = dto.getCommandName();
                 logger.info("Receive command " + command);
-                if (dto.getLogin()== null && dto.getPassword() == null){
-                    d = false;
-                }
-                else if (!command.equals("Auth") && !command.equals("Register")) {
-                    d = checkAuth(dto.getLogin(), dto.getPassword());
-                }
-                if (d || command.equals("Auth") || command.equals("Register")) {
-                    Commands.runCommandFromString(Commands.getWorkersSet(), command, dto);
-                }
-                else {
-                    CommandResponseDto dto1 = new CommandResponseDto(dto.getCommandArgs()); // if client set wrong login and password
-                    dto1.setResponse("you should be authorized");
-                    ClientCaller clientCaller = new ClientCaller();
-                    clientCaller.sendToClient(transformer.serialize(dto1));
-                }
+                Commands.runCommandFromString(Commands.getWorkersSet(), command, dto);
+//                if (dto.getLogin()== null && dto.getPassword() == null){
+//                    d = false;
+//                }
+//                else if (!command.equals("Auth") && !command.equals("Register")) {
+//                    d = checkAuth(dto.getLogin(), dto.getPassword());
+//                }
+//                if (d || command.equals("Auth") || command.equals("Register")) {
+//                    Commands.runCommandFromString(Commands.getWorkersSet(), command, dto);
+//                }
+//                else {
+//                    CommandResponseDto dto1 = new CommandResponseDto(dto.getCommandArgs()); // if client set wrong login and password
+//                    dto1.setResponse("you should be authorized");
+//                    ClientCaller clientCaller = new ClientCaller();
+//                    clientCaller.sendToClient(transformer.serialize(dto1));
+//                }
 
             }
         } catch (IOException e) {

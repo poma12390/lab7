@@ -33,14 +33,21 @@ public class FilterBySalaryCommand extends BaseCommand {
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) throws InvalidSalaryException {
         FilterBySalaryCommandDto filterBySalaryCommandDto = (FilterBySalaryCommandDto) params.getCommandArgs();
-        float salary = filterBySalaryCommandDto.getSalary();
-        String response = "";
-
-        List<Worker> workers = (set.stream().filter((p) -> p.getSalary() == salary).collect(Collectors.toList())); // Получаем нужных челов
-        response = response + "Всего найдено " + workers.size() + " челов" + "\r\n";
-        filterBySalaryCommandDto.setWorkers(workers);
         CommandResponseDto<FilterBySalaryCommandDto> dto = new CommandResponseDto<>(filterBySalaryCommandDto);
-        dto.setResponse(response);
+        boolean auth = Commands.checkAuth(params);
+        if (!auth) {
+            dto.setResponse("you should be authorized");
+        } else {
+            float salary = filterBySalaryCommandDto.getSalary();
+            String response = "";
+
+            List<Worker> workers = (set.stream().filter((p) -> p.getSalary() == salary).collect(Collectors.toList())); // Получаем нужных челов
+            response = response + "Всего найдено " + workers.size() + " челов" + "\r\n";
+            filterBySalaryCommandDto.setWorkers(workers);
+
+            dto.setResponse(response);
+
+        }
         clientCaller.sendToClient(transformer.serialize(dto));
     }
 }

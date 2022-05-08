@@ -21,16 +21,20 @@ public class ShowCommand extends BaseCommand {
 
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
+
         ShowCommandDto showCommandDto = new ShowCommandDto();
-
-        showCommandDto.setWorkers(set
-                .stream()
-                .sorted(Comparator.comparing(Worker::getName))
-                .collect(Collectors.toList())
-        );
-
-        clientCaller.sendToClient(
-                transformer.serialize(new CommandResponseDto<>(showCommandDto))
+        CommandResponseDto<ShowCommandDto> commandResponseDto = new CommandResponseDto<>(showCommandDto);
+        boolean auth = Commands.checkAuth(params);
+        if (!auth) {
+            commandResponseDto.setResponse("you should be authorized");
+        } else {
+            showCommandDto.setWorkers(set
+                    .stream()
+                    .sorted(Comparator.comparing(Worker::getName))
+                    .collect(Collectors.toList())
+            );
+        }
+        clientCaller.sendToClient(transformer.serialize(commandResponseDto)
         );
     }
 }

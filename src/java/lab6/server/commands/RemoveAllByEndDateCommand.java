@@ -14,7 +14,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashSet;
 
-public class    RemoveAllByEndDateCommand extends BaseCommand {
+public class RemoveAllByEndDateCommand extends BaseCommand {
     @Override
     public String getName() {
         return "remove_all_by_end_date";
@@ -29,20 +29,24 @@ public class    RemoveAllByEndDateCommand extends BaseCommand {
      * removeByEndDate command
      *
      * @param params end date to delete elements with
-     *   delete elemets with input end date
+     *               delete elemets with input end date
      */
 
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) throws InvalidDateFormatException, ParseException, InvalidEndDateException {
+        boolean auth = Commands.checkAuth(params);
         RemoveAllByEndDateCommandDto removeAllByEndDateCommandDto = (RemoveAllByEndDateCommandDto) params.getCommandArgs();
-        Date endDate = removeAllByEndDateCommandDto.getEndDate();
-        long count = (set.stream().filter((p) -> p.getEndDate().equals(endDate)).count());
-       // Optional<Worker> workers = set.stream().filter((p)-> p.getEndDate().equals(endDate)).findAny();
-        //Commands.getIds().removeIf(p -> p.equals(work.getId()));
-        set.removeIf(worker -> worker.getEndDate().equals(endDate));
-        removeAllByEndDateCommandDto.setCount(count);
         CommandResponseDto<RemoveAllByEndDateCommandDto> dto = new CommandResponseDto<>(removeAllByEndDateCommandDto);
+        if (!auth) {
+            dto.setResponse("you should be authorized");
+        } else {
+            Date endDate = removeAllByEndDateCommandDto.getEndDate();
+            long count = (set.stream().filter((p) -> p.getEndDate().equals(endDate)).count());
+            // Optional<Worker> workers = set.stream().filter((p)-> p.getEndDate().equals(endDate)).findAny();
+            //Commands.getIds().removeIf(p -> p.equals(work.getId()));
+            set.removeIf(worker -> worker.getEndDate().equals(endDate));
+            removeAllByEndDateCommandDto.setCount(count);
+        }
         clientCaller.sendToClient(transformer.serialize(dto));
-
     }
 }

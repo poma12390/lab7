@@ -2,6 +2,7 @@ package lab6.server.commands;
 
 import lab6.common.Person;
 import lab6.common.Position;
+import lab6.common.Transformer;
 import lab6.common.Worker;
 import lab6.common.dto.CommandRequestDto;
 import lab6.common.exceptions.EmptyCollectionException;
@@ -13,9 +14,14 @@ import lab6.server.setters.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -264,6 +270,33 @@ public class Commands {
                 }
             }
         }
+    }
+
+
+
+    public static boolean checkAuth(CommandRequestDto<? extends Serializable> commandResponseDto) {
+        String login = commandResponseDto.getLogin();
+        String password = commandResponseDto.getPassword();
+        boolean c = false;
+        Database database = Commands.getDatabase();
+        if (login == null || password == null){
+            return c;
+        }
+        try {
+            ResultSet set = database.executeQuery("select * from users where username = ?", login);
+            while (set.next()) {
+                String password1 = set.getString("password");
+                String password2 = Transformer.Encrypt(password, set.getString("salt"));
+                if (password1.equals(password2)) {
+                    c = true;
+                }
+            }
+            database.closeQuery();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+
+        return c;
     }
 
     public static void funExit(){

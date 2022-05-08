@@ -27,19 +27,24 @@ public class UpdateIdCommand extends BaseCommand {
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) throws IOException {
         UpdateIdCommandDto updateIdCommandDto = (UpdateIdCommandDto) params.getCommandArgs();
         CommandResponseDto<UpdateIdCommandDto> dto = new CommandResponseDto<>(updateIdCommandDto);
-        if (updateIdCommandDto.getWorkerDto() != null) {
-            Worker newbum = Transformer.WorkerDtoToWorker(updateIdCommandDto.getWorkerDto());
-            Worker bum = Commands.getWorkerById(updateIdCommandDto.getWorkerId());
-            Transformer.WorkerToWorker(bum, newbum);
-            dto.setResponse("Success");
-            clientCaller.sendToClient(transformer.serialize(dto));
+        boolean auth = Commands.checkAuth(params);
+        if (!auth) {
+            dto.setResponse("you should be authorized");
         } else {
-            if (Commands.getIds().contains(updateIdCommandDto.getWorkerId())) {
-                dto.setResponse("Correct id");
-                clientCaller.sendToClient(transformer.serialize(dto));
-            } else {dto.setResponse("UnCorrect Id");
-                clientCaller.sendToClient(transformer.serialize(dto));}
+            if (updateIdCommandDto.getWorkerDto() != null) {
+                Worker newbum = Transformer.WorkerDtoToWorker(updateIdCommandDto.getWorkerDto());
+                Worker bum = Commands.getWorkerById(updateIdCommandDto.getWorkerId());
+                Transformer.WorkerToWorker(bum, newbum);
+                dto.setResponse("Success");
+            } else {
+                if (Commands.getIds().contains(updateIdCommandDto.getWorkerId())) {
+                    dto.setResponse("Correct id");
+                } else {
+                    dto.setResponse("UnCorrect Id");
+                }
 
+            }
         }
+        clientCaller.sendToClient(transformer.serialize(dto));
     }
 }

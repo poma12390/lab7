@@ -31,20 +31,26 @@ public class AddIfMinCommand extends BaseCommand {
         WorkerDto workerDto = addIfMinCommandDto.getBum();
         Worker bum = Transformer.WorkerDtoToWorker(workerDto);
         CommandResponseDto<AddIfMinCommandDto> dto = new CommandResponseDto<>(addIfMinCommandDto);
-        if (set.size() == 0) {
-            makeId(bum);
-            set.add(bum);
+        boolean auth = Commands.checkAuth(params);
+        if (!auth) {
+            dto.setResponse("you should be authorized");
         } else {
-            Worker min = set.stream().min(Worker::compareTo).get(); //stream Api
-            if (bum.compareTo(min) < 0) {
+            if (set.size() == 0) {
                 makeId(bum);
                 set.add(bum);
-                dto.setResponse("success");
-
             } else {
-                dto.setResponse("not min element");
-            }
-        } clientCaller.sendToClient(transformer.serialize(dto));
+                Worker min = set.stream().min(Worker::compareTo).get(); //stream Api
+                if (bum.compareTo(min) < 0) {
+                    makeId(bum);
+                    set.add(bum);
+                    dto.setResponse("success");
 
+                } else {
+                    dto.setResponse("not min element");
+                }
+            }
+
+        }
+        clientCaller.sendToClient(transformer.serialize(dto));
     }
 }

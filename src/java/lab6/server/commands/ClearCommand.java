@@ -18,10 +18,17 @@ public class ClearCommand extends BaseCommand {
 
     @Override
     protected void Execute(CommandRequestDto<? extends Serializable> params, LinkedHashSet<Worker> set, Transformer transformer, ClientCaller clientCaller) {
-
-        set.clear();
         CommandResponseDto<ClearCommandDto> dto = new CommandResponseDto<>(new ClearCommandDto());
-        dto.setResponse("success");
+        boolean auth = Commands.checkAuth(params);
+        if (!auth) {
+            dto.setResponse("you should be authorized");
+        } else {
+            set.clear();
+
+            dto.setResponse("success");
+            clientCaller.sendToClient(transformer.serialize(dto));
+        }
         clientCaller.sendToClient(transformer.serialize(dto));
+
     }
 }
