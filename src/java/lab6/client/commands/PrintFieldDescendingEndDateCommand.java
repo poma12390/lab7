@@ -1,14 +1,14 @@
 package lab6.client.commands;
 
-import com.sun.xml.internal.bind.v2.TODO;
-import lab6.client.ServerReceiver;
 import lab6.common.dto.CommandRequestDto;
 import lab6.common.dto.CommandResponseDto;
 import lab6.common.dto.PrintFieldDescendingEndDateCommandDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class PrintFieldDescendingEndDateCommand extends BaseCommand {
     private static final Logger logger
@@ -31,12 +31,14 @@ public class PrintFieldDescendingEndDateCommand extends BaseCommand {
 
         byte[] buf = serverCaller.sendToServer(transformer.Serialize(crd));
 
-        CommandResponseDto response = (CommandResponseDto) transformer.DeSerialize(buf);
-        dto = (PrintFieldDescendingEndDateCommandDto) response.getCommandArgs();
+        CommandResponseDto<PrintFieldDescendingEndDateCommandDto> response = (CommandResponseDto) transformer.DeSerialize(buf);
+        dto =  response.getCommandArgs();
         List<Date> responselist = dto.getDates();
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         for (Date i : responselist){
-            logger.info(i + "; ");
+            logger.info(simpleDateFormat.format(i) + "; ");
         }
-        logger.info("");
+
     }
 }
