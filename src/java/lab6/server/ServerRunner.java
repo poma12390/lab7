@@ -15,14 +15,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+
 public class ServerRunner implements SignalHandler{
     private static final Logger logger
             = LoggerFactory.getLogger(ServerRunner.class);
 
     public static void main(String[] args) {
 
+
         Commands.temporaryStart();
         Commands.dataBaseToCollection();
+
 
         new Thread(() -> {
             ClientReceiver receiver = new ClientReceiver();

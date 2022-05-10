@@ -50,7 +50,6 @@ public class Commands {
 
     private static final List<lab6.server.commands.BaseCommand> commands = Arrays.asList(
             new ShowCommand(),
-            new ExitCommand(),
             new InfoCommand(),
             new AddCommand(),
             new AddIfMinCommand(),

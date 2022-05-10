@@ -11,6 +11,9 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Transformer {
     private static final Logger logger
@@ -135,10 +138,27 @@ public class Transformer {
         ObjectInputStream is = new ObjectInputStream(in);
         return is.readObject();
     }
-    public static String parseDate(String date){
-        String newDate = "";
 
-        return newDate;
+    public static long[] DateListToLongArray(List<Date> list){
+        List<Long> lst = new ArrayList<>();
+        long[] arr = new long[list.size()];
+        for (Date i : list){
+            lst.add(i.getTime());
+
+        }
+        for(int i = 0; i < list.size(); i++) arr[i] = lst.get(i);
+        Transformer.longArrayToDateList(arr);
+        return arr;
+
     }
+
+    public static List<Date> longArrayToDateList(long[] arr){
+        List<Date> lst= new ArrayList<>();
+        for (long l : arr) {
+            lst.add(new Date(l));
+        }
+        return lst;
+    }
+
 
 }

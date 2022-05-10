@@ -24,16 +24,12 @@ public class ShowCommand extends BaseCommand {
 
         ShowCommandDto showCommandDto = new ShowCommandDto();
         CommandResponseDto<ShowCommandDto> commandResponseDto = new CommandResponseDto<>(showCommandDto);
-        boolean auth = Commands.checkAuth(params);
-        if (!auth) {
-            commandResponseDto.setResponse("you should be authorized");
-        } else {
-            showCommandDto.setWorkers(set
-                    .stream()
-                    .sorted(Comparator.comparing(Worker::getName))
-                    .collect(Collectors.toList())
-            );
-        }
+        showCommandDto.setWorkers(set
+                .stream()
+                .sorted(Comparator.comparing(Worker::getName))
+                .collect(Collectors.toList())
+        );
+
         clientCaller.sendToClient(transformer.serialize(commandResponseDto)
         );
     }
