@@ -7,12 +7,15 @@ import lab6.common.dto.CommandRequestDto;
 import lab6.common.dto.CommandResponseDto;
 import lab6.common.dto.WorkerDto;
 import lab6.server.ClientCaller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.LinkedHashSet;
 
 public class AddCommand extends BaseCommand {
+    private static final Logger logger
+            = LoggerFactory.getLogger(AddCommand.class);
     /**
      * add command
      * add new Worker and set stats
@@ -28,13 +31,14 @@ public class AddCommand extends BaseCommand {
         } else {
             WorkerDto workerDto = addCommandDto.getBum();
             Worker bum = Transformer.WorkerDtoToWorker(workerDto);
-            Commands.addWorkerToDataBase(bum);
-            lab6.server.commands.Commands.makeId(bum);
+            System.out.println(bum);
             try {
-                int req = Commands.getDatabase().executeUpdate("INSERT INTO workers VALUES (nextval('WorkerIdSetter'), 'poma',1,2, '2022-02-02' , 25 , '2010-04-04' , '2020-05-05' , 'DIRECTOR' , ?, 12.1 , 13.0)", bum.getCreationDate());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                bum.setId(Commands.addWorkerToDataBase(bum));
+                set.add(bum);
+            }catch (RuntimeException e){
+                logger.warn(e.getMessage());
             }
+
 
             dto.setResponse("success");
         }

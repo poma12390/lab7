@@ -10,6 +10,7 @@ import lab6.common.exceptions.InvalidEndDateException;
 import lab6.server.ClientCaller;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -41,11 +42,18 @@ public class RemoveAllByEndDateCommand extends BaseCommand {
             dto.setResponse("you should be authorized");
         } else {
             Date endDate = removeAllByEndDateCommandDto.getEndDate();
-            long count = (set.stream().filter((p) -> p.getEndDate().equals(endDate)).count());
+            //long count = (set.stream().filter((p) -> p.getEndDate().equals(endDate)).count());
+            try {
+                int count = Commands.getDatabase().executeUpdate("delete from workers where username = ? and enddate = ?", params.getLogin(), endDate);
+                set.removeIf(worker -> (worker.getEndDate().equals(endDate) && worker.getUser().equals(params.getLogin())));
+                removeAllByEndDateCommandDto.setCount(count);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             // Optional<Worker> workers = set.stream().filter((p)-> p.getEndDate().equals(endDate)).findAny();
             //Commands.getIds().removeIf(p -> p.equals(work.getId()));
-            set.removeIf(worker -> worker.getEndDate().equals(endDate));
-            removeAllByEndDateCommandDto.setCount(count);
+
+
         }
         clientCaller.sendToClient(transformer.serialize(dto));
     }

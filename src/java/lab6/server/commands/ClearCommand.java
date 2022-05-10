@@ -8,6 +8,7 @@ import lab6.common.dto.CommandResponseDto;
 import lab6.server.ClientCaller;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.LinkedHashSet;
 
 public class ClearCommand extends BaseCommand {
@@ -23,10 +24,13 @@ public class ClearCommand extends BaseCommand {
         if (!auth) {
             dto.setResponse("you should be authorized");
         } else {
-            set.clear();
-
-            dto.setResponse("success");
-            clientCaller.sendToClient(transformer.serialize(dto));
+            try {
+                int count = Commands.getDatabase().executeUpdate("delete from workers where username = ?", params.getLogin());
+                set.removeIf(worker -> worker.getUser().equals(params.getLogin()));
+                dto.setResponse("deleted " + count + " elements");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
         clientCaller.sendToClient(transformer.serialize(dto));
 

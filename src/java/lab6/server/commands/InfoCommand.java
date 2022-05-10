@@ -29,11 +29,13 @@ public class InfoCommand extends BaseCommand {
             if (size == 0) {
                 response = response + "empty collection";
             } else {
+                long count = set.stream().filter((p) -> p.getUser().equals(params.getLogin())).count();
                 Iterator<Worker> it = set.iterator();
                 Worker p1 = it.next();
-                response = response + "Collection size " + size + "\r\n";
-                response = response + "Type - Worker \r\n";
-                response = response + "Created date - " + p1.getCreationDate();
+                response = response + "Collection size " + size + "\r\n"
+                        + "Type - Worker \r\n"
+                        + "Created date - " + p1.getCreationDate()  + "\r\n"
+                        + "your elements - " + count;
 
             }
 

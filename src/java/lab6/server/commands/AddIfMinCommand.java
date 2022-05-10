@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 
-import static lab6.server.commands.Commands.makeId;
 
 public class AddIfMinCommand extends BaseCommand {
     @Override
@@ -36,12 +35,12 @@ public class AddIfMinCommand extends BaseCommand {
             dto.setResponse("you should be authorized");
         } else {
             if (set.size() == 0) {
-                makeId(bum);
+                Commands.addWorkerToDataBase(bum);
                 set.add(bum);
             } else {
                 Worker min = set.stream().min(Worker::compareTo).get(); //stream Api
                 if (bum.compareTo(min) < 0) {
-                    makeId(bum);
+                    bum.setId(Commands.addWorkerToDataBase(bum));
                     set.add(bum);
                     dto.setResponse("success");
 

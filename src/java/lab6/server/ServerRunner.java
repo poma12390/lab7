@@ -4,7 +4,6 @@ package lab6.server;
 import lab6.common.dto.ClearCommandDto;
 import lab6.common.dto.CommandRequestDto;
 import lab6.server.commands.Commands;
-import lab6.server.database.Database;
 import lab6.server.setters.DiagnosticSignalHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +20,9 @@ public class ServerRunner implements SignalHandler{
             = LoggerFactory.getLogger(ServerRunner.class);
 
     public static void main(String[] args) {
-        Database database = Database.getInstance();
 
-        Commands.temporaryStart("C:\\Users\\pomat\\IdeaProjects\\lab6\\Server\\save.csv");
+        Commands.temporaryStart();
         Commands.dataBaseToCollection();
-
-        //String env = System.getenv("Javahome");
-        //System.out.println(env + " env");
-        //Commands.temporaryStart(env);
-
 
         new Thread(() -> {
             ClientReceiver receiver = new ClientReceiver();

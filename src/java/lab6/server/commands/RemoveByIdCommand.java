@@ -8,6 +8,7 @@ import lab6.common.dto.RemoveByIdCommandDto;
 import lab6.server.ClientCaller;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.LinkedHashSet;
 
 public class RemoveByIdCommand extends BaseCommand {
@@ -37,12 +38,17 @@ public class RemoveByIdCommand extends BaseCommand {
             dto.setResponse("you should be authorized");
         } else {
 
-            System.out.println(params.getLogin());
             int id = removeByIdCommandDto.getId();
-            long count = (set.stream().filter((p) -> p.getId() == id).count());
-            set.removeIf(worker -> worker.getId() == id);
-            removeByIdCommandDto.setCount(count);
+            //long count = (set.stream().filter((p) -> p.getId() == id).count());
+            try {
+                int count = Commands.getDatabase().executeUpdate("delete from workers where username = ? and id = ?", params.getLogin(), id);
+                System.out.println(params.getLogin());
+                removeByIdCommandDto.setCount(count);
 
+                set.removeIf(worker -> (worker.getId().equals(id) && worker.getUser().equals(params.getLogin())));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
         }
         clientCaller.sendToClient(transformer.serialize(dto));

@@ -14,6 +14,15 @@ public class WorkerDto extends AbstractDto {
     private Date endDate;
     private Position position;
     private PersonDto person;
+    private String user;
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;

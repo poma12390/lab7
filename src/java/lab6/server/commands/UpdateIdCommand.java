@@ -9,6 +9,8 @@ import lab6.server.ClientCaller;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedHashSet;
 
 public class UpdateIdCommand extends BaseCommand {
@@ -34,14 +36,22 @@ public class UpdateIdCommand extends BaseCommand {
             if (updateIdCommandDto.getWorkerDto() != null) {
                 Worker newbum = Transformer.WorkerDtoToWorker(updateIdCommandDto.getWorkerDto());
                 Worker bum = Commands.getWorkerById(updateIdCommandDto.getWorkerId());
+                Commands.updateWorkerById(updateIdCommandDto.getWorkerId(), newbum);
                 Transformer.WorkerToWorker(bum, newbum);
                 dto.setResponse("Success");
             } else {
-                if (Commands.getIds().contains(updateIdCommandDto.getWorkerId())) {
-                    dto.setResponse("Correct id");
-                } else {
-                    dto.setResponse("UnCorrect Id");
+                try {
+                    ResultSet set1 = Commands.getDatabase().executeQuery("select * from workers where id = ?", updateIdCommandDto.getWorkerId());
+                    if (set1.next()) {
+                        dto.setResponse("Correct id");
+                    } else {
+                        dto.setResponse("UnCorrect Id");
+                    }
+
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
+
 
             }
         }

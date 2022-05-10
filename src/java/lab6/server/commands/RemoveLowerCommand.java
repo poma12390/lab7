@@ -9,8 +9,11 @@ import lab6.common.exceptions.EmptyCollectionException;
 import lab6.server.ClientCaller;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class RemoveLowerCommand extends BaseCommand {
@@ -36,10 +39,15 @@ public class RemoveLowerCommand extends BaseCommand {
                 clientCaller.sendToClient(transformer.serialize(dto));
                 throw new EmptyCollectionException();
             }
-            Worker min = Collections.min(set);
-            set.remove(min);
+            List<Worker> set1 = set.stream().filter((p) -> p.getUser().equals(params.getLogin())).collect(Collectors.toList());
+            Worker min = Collections.min(set1);
+            try {
+                int count = Commands.getDatabase().executeUpdate("delete from workers where username = ? and name = ? and salary = ? and creationdate = ?", params.getLogin(), min.getName(), min.getSalary(), min.getCreationDate());
+                dto.setResponse("success");
+                set.remove(min);
+            } catch (SQLException ignored) {
 
-            dto.setResponse("success");
+            }
 
         }
         clientCaller.sendToClient(transformer.serialize(dto));

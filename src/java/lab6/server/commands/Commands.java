@@ -25,7 +25,6 @@ public class Commands {
     private static final Logger logger
             = LoggerFactory.getLogger(Commands.class);
     public static boolean blockPrompts = false;
-    private static ArrayList<Integer> ids = new ArrayList<Integer>();
     private static LinkedHashSet<Worker> workers = new LinkedHashSet<>();
 
     public static LinkedHashSet<Worker> getWorkersSet() {
@@ -47,6 +46,7 @@ public class Commands {
     }
 
     private static Database database;
+    static boolean test = true;
 
     private static final List<lab6.server.commands.BaseCommand> commands = Arrays.asList(
             new ShowCommand(),
@@ -66,9 +66,9 @@ public class Commands {
             new RegisterCommand()
     );
 
-    public static void temporaryStart(String filename) {
+    public static void temporaryStart() {
         database = Database.getInstance();
-        open(filename);
+        //open(filename);
         // begin(start, workers);
     }
 
@@ -81,23 +81,36 @@ public class Commands {
      *
      * @param filename file name
      */
-    public static void open(String filename) {
+    public static String open(String filename) {
         try (InputStream is = Files.newInputStream(Paths.get(filename))) {
             try (BufferedInputStream bis = new BufferedInputStream(is)) {
                 ByteArrayOutputStream buf = new ByteArrayOutputStream();
+                int result = bis.read();
+                while (result != -1) {
+                    buf.write((byte) result);
+                    result = bis.read();
+                }
+                System.out.println(buf.toString().replace("\"", ""));
+                return buf.toString().replace("\"", "");
             } catch (Exception e) {
-                if (e.getMessage().isEmpty()) {
+
+                if (e.getMessage().isEmpty()){
                     logger.warn(e.getCause().getMessage());
-                } else {
+                }
+                else {
                     logger.warn(e.getMessage());
                 }
+
+                return "";
             }
         } catch (Exception e) {
-            if (e.getMessage().isEmpty()) {
+            if (e.getMessage().isEmpty()){
                 logger.warn(e.getCause().getMessage());
-            } else {
+            }
+            else {
                 logger.warn(e.getMessage());
             }
+            return ""; // ?????????
         }
     }
 
@@ -113,20 +126,44 @@ public class Commands {
         return null;
     }
 
-    public static void addWorkerToDataBase(Worker bum) {
+    public static int addWorkerToDataBase(Worker bum) {
+        int id = 0;
         String name = bum.getName();
         long x = bum.getCoordinates().getX();
         int y = bum.getCoordinates().getY();
-        String creationDate = String.valueOf(bum.getCreationDate());
+        Date creationDate = bum.getCreationDate();
         float salary = bum.getSalary();
-        String startDate = String.valueOf(bum.getStartDate());
-        String endDate = String.valueOf(bum.getEndDate());
+        Date startDate = bum.getStartDate();
+        Date endDate = bum.getEndDate();
         Position pos = bum.getPosition();
-        String birthday = String.valueOf(bum.getPerson().getBirthday());
+        ZonedDateTime birthday = bum.getPerson().getBirthday();
         float height = bum.getPerson().getHeight();
         float weight = bum.getPerson().getWeight();
         try {
-            int req = Commands.getDatabase().executeUpdate("INSERT INTO workers VALUES (nextval('WorkerIdSetter'), 'poma',1,2, '2022-02-02' , 25 , '2010-04-04' , '2020-05-05' , 'DIRECTOR' , ?, 12.1 , 13.0)", bum.getCreationDate());
+            ResultSet rs = Commands.getDatabase().executeQuery("INSERT INTO workers VALUES (nextval('WorkerIdSetter'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?) RETURNING id",name, x,y,creationDate,salary,startDate,endDate,pos,birthday,height,weight,bum.getUser() );
+            while (rs.next()){
+                id = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return id;
+    }
+
+    public static void updateWorkerById(int id, Worker bum){
+        String name = bum.getName();
+        long x = bum.getCoordinates().getX();
+        int y = bum.getCoordinates().getY();
+        Date creationDate = bum.getCreationDate();
+        float salary = bum.getSalary();
+        Date startDate = bum.getStartDate();
+        Date endDate = bum.getEndDate();
+        Position pos = bum.getPosition();
+        ZonedDateTime birthday = bum.getPerson().getBirthday();
+        float height = bum.getPerson().getHeight();
+        float weight = bum.getPerson().getWeight();
+        try {
+            int req = Commands.getDatabase().executeUpdate("UPDATE workers SET (name, x, y,creationdate,salary,startdate,enddate,pos,birthday,height,weight) = (?, ?, ? ,?, ?, ?,?,?,?,?,? )WHERE id = ?;",name, x,y,creationDate,salary,startDate,endDate,pos,birthday,height,weight,id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -179,27 +216,7 @@ public class Commands {
         }
     }
 
-    /**
-     * id getter
-     */
 
-    public static ArrayList<Integer> getIds() {
-        return ids;
-    }
-
-    public static Worker makeId(Worker bum) {
-        Collections.sort(ids);
-        for (int i = 1; i < ids.size() + 2; i++) {
-            if (!ids.contains(i)) {
-                bum.setId(i);
-                ids.add(i);
-                break;
-            }
-        }
-        return bum;
-    }
-
-    static boolean test = true;
 
     public static void runCommandFromString(LinkedHashSet<Worker> workers, String input, CommandRequestDto<? extends Serializable> params) {
         try {
@@ -243,7 +260,7 @@ public class Commands {
         boolean c = false;
         Database database = Commands.getDatabase();
         if (login == null || password == null) {
-            return c;
+            return false;
         }
         try {
             ResultSet set = database.executeQuery("select * from users where username = ?", login);
