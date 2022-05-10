@@ -1,6 +1,5 @@
 package lab6.client.commands;
 
-import lab6.client.ServerReceiver;
 import lab6.client.memory.LoginPassword;
 import lab6.common.Transformer;
 import lab6.common.Worker;
@@ -25,6 +24,7 @@ public class AddCommand extends BaseCommand {
     protected void Execute(List<String> params) throws IOException, InvalidSalaryException, InvalidDateFormatException, ParseException, InvalidEndDateException {
         ParamsChecker.checkParams(0, params);
         Worker bum = new Worker(LoginPassword.getLogin());
+        System.out.println(bum.getUser());
         Utils.updateAll(bum);
 
         AddCommandDto dto= new AddCommandDto();

@@ -6,13 +6,7 @@ import lab6.common.dto.WorkerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -49,6 +43,7 @@ public class Transformer {
         man.setEndDate(bum.getEndDate());
         man.setPerson(PersonToPersonDto(bum.getPerson()));
         man.setPosition(bum.getPosition());
+        man.setUser(bum.getUser());
         return man;
     }
 
