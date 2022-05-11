@@ -31,8 +31,8 @@ public class ClientCaller {
         host = packageDto.getHost();
         DatagramPacket dp1 = new DatagramPacket(arr,len,host,port);
         try {
-            logger.info("send  " + len + " bytes to" + host + " " + port);
             ds.send(dp1);
+            logger.info("send  " + len + " bytes to" + host + " " + port);
         } catch (IOException ignored) {}
     }
 
