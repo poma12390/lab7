@@ -12,8 +12,10 @@ import lab6.server.ServerRunner;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.LinkedHashSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class RemoveByIdCommand extends BaseCommand {
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
     @Override
     public String getName() {
         return "remove_by_id";
@@ -43,12 +45,15 @@ public class RemoveByIdCommand extends BaseCommand {
             int id = removeByIdCommandDto.getId();
             //long count = (set.stream().filter((p) -> p.getId() == id).count());
             try {
+                lock.writeLock().lock();
                 int count = Commands.getDatabase().executeUpdate("delete from workers where username = ? and id = ?", params.getLogin(), id);
                 removeByIdCommandDto.setCount(count);
 
                 set.removeIf(worker -> (worker.getId().equals(id) && worker.getUser().equals(params.getLogin())));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            }finally {
+                lock.writeLock().unlock();
             }
 
         }

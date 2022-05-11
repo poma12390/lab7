@@ -15,10 +15,12 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 
 public class RemoveLowerCommand extends BaseCommand {
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
     @Override
     public String getName() {
         return "remove_lower";
@@ -46,11 +48,14 @@ public class RemoveLowerCommand extends BaseCommand {
             List<Worker> set1 = set.stream().filter((p) -> p.getUser().equals(params.getLogin())).collect(Collectors.toList());
             Worker min = Collections.min(set1);
             try {
+                lock.writeLock().lock();
                 int count = Commands.getDatabase().executeUpdate("delete from workers where username = ? and name = ? and salary = ? and creationdate = ?", params.getLogin(), min.getName(), min.getSalary(), min.getCreationDate());
                 dto.setResponse("success");
                 set.remove(min);
             } catch (SQLException ignored) {
 
+            }finally {
+                lock.writeLock().unlock();
             }
 
         }

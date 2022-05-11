@@ -15,7 +15,7 @@ import java.util.Properties;
 public class Database {
     private static volatile Database instance;
     private final static Logger logger = LoggerFactory.getLogger(Database.class);
-    private static String CONFIG_FILE = "db.cfg";
+    private static final String CONFIG_FILE = "db.cfg";
     private final Connection connection;
     private PreparedStatement stmt;
 
@@ -44,7 +44,6 @@ public class Database {
         String url = String.format("jdbc:postgresql://127.0.0.1:5432/postgres");
         //String url = String.format("jdbc:postgresql://pg:5432/studs");
         logger.info(url);
-        System.out.println(USER + " " + PASS);
         connection = DriverManager.getConnection(url, USER, PASS);
         logger.info(String.valueOf(connection));
     }

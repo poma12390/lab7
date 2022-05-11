@@ -14,8 +14,10 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class UpdateIdCommand extends BaseCommand {
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
     @Override
     protected int getCommandParamsCount() {
         return 1;
@@ -43,6 +45,7 @@ public class UpdateIdCommand extends BaseCommand {
                 dto.setResponse("Success");
             } else {
                 try {
+                    lock.writeLock().lock();
                     ResultSet set1 = Commands.getDatabase().executeQuery("select * from workers where id = ?", updateIdCommandDto.getWorkerId());
                     if (set1.next()) {
                         dto.setResponse("Correct id");
@@ -52,6 +55,8 @@ public class UpdateIdCommand extends BaseCommand {
 
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
+                }finally {
+                    lock.writeLock().unlock();
                 }
 
 

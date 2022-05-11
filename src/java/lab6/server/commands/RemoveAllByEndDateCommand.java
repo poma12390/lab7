@@ -16,8 +16,10 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class RemoveAllByEndDateCommand extends BaseCommand {
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
     @Override
     public String getName() {
         return "remove_all_by_end_date";
@@ -43,14 +45,19 @@ public class RemoveAllByEndDateCommand extends BaseCommand {
         if (!auth) {
             dto.setResponse("you should be authorized");
         } else {
+
             Date endDate = removeAllByEndDateCommandDto.getEndDate();
             //long count = (set.stream().filter((p) -> p.getEndDate().equals(endDate)).count());
             try {
+                lock.writeLock().lock();
                 int count = Commands.getDatabase().executeUpdate("delete from workers where username = ? and enddate = ?", params.getLogin(), endDate);
                 set.removeIf(worker -> (worker.getEndDate().equals(endDate) && worker.getUser().equals(params.getLogin())));
+                //lock.writeLock().unlock();
                 removeAllByEndDateCommandDto.setCount(count);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            }finally {
+                lock.writeLock().unlock();
             }
             // Optional<Worker> workers = set.stream().filter((p)-> p.getEndDate().equals(endDate)).findAny();
             //Commands.getIds().removeIf(p -> p.equals(work.getId()));
