@@ -41,7 +41,7 @@ public class ServerRunner implements SignalHandler{
 
         new Thread(() -> {
             ClientReceiver receiver = new ClientReceiver();
-                receiver.run();
+            receiver.run();
             // выполнение в отдельном потоке
 
         }).start();

@@ -19,7 +19,7 @@ public class ClientReceiver {
     public static int len = arr.length;
     public static DatagramSocket ds;
     public static DatagramPacket dp;
-    int port = 12390;
+    int port = 49848;
 
 
     void run() {

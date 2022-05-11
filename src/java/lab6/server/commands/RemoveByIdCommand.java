@@ -44,7 +44,6 @@ public class RemoveByIdCommand extends BaseCommand {
             //long count = (set.stream().filter((p) -> p.getId() == id).count());
             try {
                 int count = Commands.getDatabase().executeUpdate("delete from workers where username = ? and id = ?", params.getLogin(), id);
-                System.out.println(params.getLogin());
                 removeByIdCommandDto.setCount(count);
 
                 set.removeIf(worker -> (worker.getId().equals(id) && worker.getUser().equals(params.getLogin())));

@@ -4,6 +4,7 @@ import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -18,8 +19,8 @@ public class Database {
     private final Connection connection;
     private PreparedStatement stmt;
 
-    static final String USER = "postgres";
-    static final String PASS = "studs";
+    static String USER;
+    static String PASS;
 
 
 
@@ -29,11 +30,21 @@ public class Database {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        Properties prop = new Properties();
-        //prop.load(classLoader.getResourceAsStream(CONFIG_FILE));
-        //String url = String.format("jdbc:postgresql://%s:5432/%s", prop.getProperty("host"), prop.getProperty("dbName"));
+        FileInputStream fis;
+        Properties property = new Properties();
+        try {
+            fis = new FileInputStream(CONFIG_FILE);
+            property.load(fis);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Database.PASS= (property.getProperty("PASS"));
+        Database.USER = property.getProperty("USER");
+
         String url = String.format("jdbc:postgresql://127.0.0.1:5432/postgres");
+        //String url = String.format("jdbc:postgresql://pg:5432/studs");
         logger.info(url);
+        System.out.println(USER + " " + PASS);
         connection = DriverManager.getConnection(url, USER, PASS);
         logger.info(String.valueOf(connection));
     }
