@@ -48,7 +48,7 @@ public class FilterBySalaryCommand extends BaseCommand {
 
         PackageDto packageDto = new PackageDto(dto,params.getHost(),params.getPort(), params.getDs());
         ServerRunner.queueToSend.add(packageDto);
-        clientCaller.send(packageDto);
+
     }
 }
 

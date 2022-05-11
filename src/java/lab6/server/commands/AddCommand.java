@@ -37,11 +37,10 @@ public class AddCommand extends BaseCommand {
                 logger.warn(e.getMessage());
             }
 
-
             dto.setResponse("success");
         }
         PackageDto packageDto = new PackageDto(dto,params.getHost(),params.getPort(), params.getDs());
         ServerRunner.queueToSend.add(packageDto);
-        clientCaller.send(packageDto);
+
     }
 }

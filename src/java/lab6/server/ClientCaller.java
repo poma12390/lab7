@@ -21,7 +21,7 @@ public class ClientCaller {
     int len;
 
 
-    public void send(PackageDto packageDto){
+    public  void send(PackageDto packageDto){
         CommandResponseDto<? extends Serializable> commandResponseDto = packageDto.getCommandResponseDto();
         DatagramSocket ds = packageDto.getDs();
 

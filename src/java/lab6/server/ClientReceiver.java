@@ -45,6 +45,7 @@ public class ClientReceiver {
                 dto.setHost(dp.getAddress());
                 dto.setDs(ds);
                 ServerRunner.queueToProcess.add(dto);
+                logger.info("Receive command " + dto.getCommandName());
                 //Commands.runCommandFromString(Commands.getWorkersSet(), dto.getCommandName(), dto);
 
 

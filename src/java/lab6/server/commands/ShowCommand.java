@@ -7,6 +7,7 @@ import lab6.common.dto.CommandResponseDto;
 import lab6.common.dto.PackageDto;
 import lab6.common.dto.ShowCommandDto;
 import lab6.server.ClientCaller;
+import lab6.server.ServerRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +40,8 @@ public class ShowCommand extends BaseCommand {
 
 
         PackageDto packageDto = new PackageDto(commandResponseDto,params.getHost(),params.getPort(), params.getDs());
-        //ServerRunner.queueToSend.add(packageDto);
-        clientCaller.send(packageDto);
+        ServerRunner.queueToSend.add(packageDto);
+        //clientCaller.send(packageDto);
 
         //clientCaller.sendToClient(Transformer.serialize(commandResponseDto));
     }
