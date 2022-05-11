@@ -8,7 +8,7 @@ public class PackageDto {
     private final CommandResponseDto<? extends Serializable> commandResponseDto;
     private final DatagramSocket ds;
 
-    private int port;
+    private final int port;
 
     public int getPort() {
         return port;
@@ -18,7 +18,7 @@ public class PackageDto {
         return host;
     }
 
-    private InetAddress host;
+    private final InetAddress host;
 
     public PackageDto(CommandResponseDto<? extends Serializable> commandResponseDto, InetAddress host, int port, DatagramSocket ds) {
         this.commandResponseDto = commandResponseDto;

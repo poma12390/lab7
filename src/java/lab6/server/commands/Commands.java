@@ -240,6 +240,7 @@ public class Commands {
             if (command.getName().equalsIgnoreCase(commandName)) {
                 try {
                     command.ExecuteCommand(commandParams, workers);
+                    logger.info("doing " + commandParams.getCommandName());
                     test = true;
                 } catch (MissedCommandArgumentException e) {
                     logger.error(e.getMessage());
