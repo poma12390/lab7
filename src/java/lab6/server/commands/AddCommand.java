@@ -2,11 +2,9 @@ package lab6.server.commands;
 
 import lab6.common.Transformer;
 import lab6.common.Worker;
-import lab6.common.dto.AddCommandDto;
-import lab6.common.dto.CommandRequestDto;
-import lab6.common.dto.CommandResponseDto;
-import lab6.common.dto.WorkerDto;
+import lab6.common.dto.*;
 import lab6.server.ClientCaller;
+import lab6.server.ServerRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,10 +29,10 @@ public class AddCommand extends BaseCommand {
         } else {
             WorkerDto workerDto = addCommandDto.getBum();
             Worker bum = Transformer.WorkerDtoToWorker(workerDto);
-            System.out.println(bum);
             try {
                 bum.setId(Commands.addWorkerToDataBase(bum));
                 set.add(bum);
+
             }catch (RuntimeException e){
                 logger.warn(e.getMessage());
             }
@@ -42,6 +40,8 @@ public class AddCommand extends BaseCommand {
 
             dto.setResponse("success");
         }
-        clientCaller.sendToClient(transformer.serialize(dto));
+        PackageDto packageDto = new PackageDto(dto,params.getHost(),params.getPort(), params.getDs());
+        ServerRunner.queueToSend.add(packageDto);
+        clientCaller.send(packageDto);
     }
 }

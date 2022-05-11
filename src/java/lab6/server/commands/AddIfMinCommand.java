@@ -2,11 +2,9 @@ package lab6.server.commands;
 
 import lab6.common.Transformer;
 import lab6.common.Worker;
-import lab6.common.dto.AddIfMinCommandDto;
-import lab6.common.dto.CommandRequestDto;
-import lab6.common.dto.CommandResponseDto;
-import lab6.common.dto.WorkerDto;
+import lab6.common.dto.*;
 import lab6.server.ClientCaller;
+import lab6.server.ServerRunner;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -50,6 +48,8 @@ public class AddIfMinCommand extends BaseCommand {
             }
 
         }
-        clientCaller.sendToClient(transformer.serialize(dto));
+        PackageDto packageDto = new PackageDto(dto,params.getHost(),params.getPort(), params.getDs());
+        ServerRunner.queueToSend.add(packageDto);
+        clientCaller.send(packageDto);
     }
 }

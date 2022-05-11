@@ -49,7 +49,7 @@ public class Transformer {
         return generatedPassword;
     }
 
-    public byte[] serialize(Serializable obj){
+    public static byte[] serialize(Serializable obj){
         try(ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             ObjectOutputStream out = new ObjectOutputStream(bos);
             out.writeObject(obj);

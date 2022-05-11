@@ -5,10 +5,12 @@ import lab6.common.Worker;
 import lab6.common.dto.AuthCommandDto;
 import lab6.common.dto.CommandRequestDto;
 import lab6.common.dto.CommandResponseDto;
+import lab6.common.dto.PackageDto;
 import lab6.common.exceptions.InvalidDateFormatException;
 import lab6.common.exceptions.InvalidEndDateException;
 import lab6.common.exceptions.InvalidSalaryException;
 import lab6.server.ClientCaller;
+import lab6.server.ServerRunner;
 import lab6.server.database.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +56,8 @@ public class AuthCommand extends BaseCommand{
         else {
             dto.setResponse("incorrect login or password");
         }
-        clientCaller.sendToClient(transformer.serialize(dto));
+        PackageDto packageDto = new PackageDto(dto,params.getHost(),params.getPort(), params.getDs());
+        ServerRunner.queueToSend.add(packageDto);
+        clientCaller.send(packageDto);
     }
 }

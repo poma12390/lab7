@@ -3,6 +3,7 @@ package lab6.server;
 
 import lab6.common.dto.ClearCommandDto;
 import lab6.common.dto.CommandRequestDto;
+import lab6.common.dto.PackageDto;
 import lab6.server.commands.Commands;
 import lab6.server.setters.DiagnosticSignalHandler;
 import org.slf4j.Logger;
@@ -10,17 +11,28 @@ import org.slf4j.LoggerFactory;
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
 
 
 public class ServerRunner implements SignalHandler{
+    public static BlockingQueue<CommandRequestDto<? extends Serializable>> queueToProcess = null;
+    public static BlockingQueue<PackageDto> queueToSend = null;
+
     private static final Logger logger
             = LoggerFactory.getLogger(ServerRunner.class);
 
+    public ServerRunner() {
+        queueToProcess  = new LinkedBlockingDeque<>();
+        queueToSend = new LinkedBlockingDeque<>();
+    }
+
     public static void main(String[] args) {
+
+        ServerRunner serverRunner = new ServerRunner();
 
 
         Commands.temporaryStart();
@@ -35,7 +47,35 @@ public class ServerRunner implements SignalHandler{
         }).start();
         logger.info("Save для закрылия");
 
-        // TODO: после Ctrl+C вызвать сохранение коллекции
+
+        new Thread(() -> {
+            // process queue
+            ExecutorService executorService = Executors.newFixedThreadPool(5);
+            while (true){
+                try {
+                    CommandRequestDto<? extends Serializable> commandRequestDto = ServerRunner.queueToProcess.take();
+                    logger.info("Receive command " + commandRequestDto.getCommandName());
+                    executorService.execute(() -> Commands.runCommandFromString(Commands.getWorkersSet(), commandRequestDto.getCommandName(), commandRequestDto));
+
+                } catch (InterruptedException e) {
+                    executorService.shutdown();
+                    break;
+                }
+            }
+
+
+
+
+
+
+        }).start();
+
+        new Thread(() -> {
+
+
+            // send queue
+
+        }).start();
 
 
 
