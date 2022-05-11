@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 
@@ -22,7 +21,7 @@ public class ServerCaller {
     DatagramChannel dc;
     ByteBuffer buf;
     InetAddress host;
-    int port = 12390;
+    int port = 49848;
     SocketAddress addr;
     SocketAddress addr1;
 
