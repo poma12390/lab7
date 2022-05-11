@@ -27,6 +27,5 @@ public class HistoryCommand extends BaseCommand {
                 logger.info(s + " ");
             }
         }
-        logger.info("");
     }
 }
