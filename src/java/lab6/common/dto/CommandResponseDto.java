@@ -7,6 +7,7 @@ public class CommandResponseDto<T extends Serializable> implements Serializable 
     private WorkerDto worker;
     private T commandArgs;
 
+
     public T getCommandArgs() {
         return commandArgs;
     }

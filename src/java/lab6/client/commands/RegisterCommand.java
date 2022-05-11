@@ -1,8 +1,11 @@
 package lab6.client.commands;
 
 import lab6.client.inputters.InputUtils;
+import lab6.client.memory.LoginPassword;
 import lab6.common.Transformer;
-import lab6.common.dto.*;
+import lab6.common.dto.CommandRequestDto;
+import lab6.common.dto.CommandResponseDto;
+import lab6.common.dto.RegisterCommandDto;
 import lab6.common.exceptions.InvalidDateFormatException;
 import lab6.common.exceptions.InvalidEndDateException;
 import lab6.common.exceptions.InvalidSalaryException;
@@ -18,6 +21,8 @@ public class RegisterCommand extends BaseCommand{
             = LoggerFactory.getLogger(RegisterCommand.class);
     @Override
     protected void Execute(List<String> params) throws IOException, InvalidSalaryException, InvalidDateFormatException, ParseException, InvalidEndDateException {
+        LoginPassword.setPassword(null); // Типо вышли из системы
+        LoginPassword.setLogin(null);
         ParamsChecker.checkParams(0,params);
         boolean c = true;
         while (c){
