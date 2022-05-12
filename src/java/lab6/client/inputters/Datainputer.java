@@ -12,7 +12,6 @@ public class Datainputer extends AbstractInputer<Date> {
     public Datainputer(BufferedReader bufferedReader, boolean blockPrompt) {
         super(bufferedReader, blockPrompt);
     }
-
     @Override
     protected Date doInput(String line) throws InvalidDateFormatException, ParseException {
         String regex = "\\d{2}\\.\\d{2}.\\d{4}";

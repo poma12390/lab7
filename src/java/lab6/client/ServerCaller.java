@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -42,10 +43,12 @@ public class ServerCaller {
             }
             addr = new InetSocketAddress(host, port);
             addr1 = new InetSocketAddress(host, port);
+            buf = ByteBuffer.wrap(arr);
+            dc.configureBlocking(false);
+            addr = ServerReceiver.receiveFromServer(dc, buf, host, port);//очистка
             for (int i = 0; i < 5; i++) {
                 try {
                     buf = ByteBuffer.wrap(arr);
-                    dc.configureBlocking(false);
                     logger.info(buf.array().length + " send " + host + " ");
                     dc.send(buf, addr1);
                     buf = ByteBuffer.wrap(ret);
@@ -56,7 +59,7 @@ public class ServerCaller {
 
 
                     if (ret[0]!=0) {
-                        CommandResponseDto response = (CommandResponseDto) transformer.DeSerialize(buf.array());
+                        CommandResponseDto<? extends Serializable> response = (CommandResponseDto<? extends Serializable>) transformer.DeSerialize(buf.array());
                         if (response.getResponse()!=null && response.getResponse().equals("you should be authorized")) {
                             throw new AuthorizationException();
                         }
@@ -70,6 +73,8 @@ public class ServerCaller {
                 }
             }
             return recive;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 dc.close();
