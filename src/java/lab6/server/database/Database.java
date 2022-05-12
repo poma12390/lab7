@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Properties;
 
 public class Database {
-    private static volatile Database instance;
+    private static  volatile Database instance;
     private final static Logger logger = LoggerFactory.getLogger(Database.class);
     private static final String CONFIG_FILE = "db.cfg";
     private final Connection connection;
@@ -21,6 +21,7 @@ public class Database {
 
     static String USER;
     static String PASS;
+    private static boolean f = true;
 
 
 
@@ -52,7 +53,7 @@ public class Database {
 
     public static Database getInstance(){
         if (instance == null) {
-            synchronized (Database.class) {
+            synchronized ((Object) Database.f) {
                 if (instance == null) {
                     try {
                         instance = new Database();

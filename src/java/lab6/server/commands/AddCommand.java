@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AddCommand extends BaseCommand {
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
     private static final Logger logger
             = LoggerFactory.getLogger(AddCommand.class);
     /**
@@ -30,11 +32,14 @@ public class AddCommand extends BaseCommand {
             WorkerDto workerDto = addCommandDto.getBum();
             Worker bum = Transformer.WorkerDtoToWorker(workerDto);
             try {
+                lock.readLock().lock();
                 bum.setId(Commands.addWorkerToDataBase(bum));
                 set.add(bum);
 
             }catch (RuntimeException e){
                 logger.warn(e.getMessage());
+            }finally {
+                lock.readLock().unlock();
             }
 
             dto.setResponse("success");

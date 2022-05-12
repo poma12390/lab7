@@ -9,9 +9,11 @@ import lab6.server.ServerRunner;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class AddIfMinCommand extends BaseCommand {
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
     @Override
     public String getName() {
         return "add_If_min";
@@ -38,9 +40,11 @@ public class AddIfMinCommand extends BaseCommand {
             } else {
                 Worker min = set.stream().min(Worker::compareTo).get(); //stream Api
                 if (bum.compareTo(min) < 0) {
+                    lock.readLock().lock();
                     bum.setId(Commands.addWorkerToDataBase(bum));
                     set.add(bum);
                     dto.setResponse("success");
+                    lock.readLock().unlock();
 
                 } else {
                     dto.setResponse("not min element");

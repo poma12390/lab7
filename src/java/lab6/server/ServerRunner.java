@@ -25,7 +25,6 @@ public class ServerRunner  {
 
     public static void main(String[] args) {
 
-
         Commands.temporaryStart();
         Commands.dataBaseToCollection();
 
